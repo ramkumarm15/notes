@@ -32,12 +32,19 @@ public async Task<IActionResult> RunAsync([EventGridTrigger] EventGridEvent @eve
     return new OkObjectResult("");
 }
 
-{
-    "Data": {},
-    "Id": "85902535-fcf2-48da-8fb2-08cdfd3a5144",
-    "Topic": "/subscriptions/f2e037c1-c057-4d76-b609-66cab14a70a8/resourceGroups/poc/providers/microsoft.appconfiguration/configurationstores/pocappconfig",
-    "Subject": "https://pocappconfig.azconfig.io/kv/Testing:Settings:Refresh?label=%00&api-version=2023-10-01",
-    "EventType": "Microsoft.AppConfiguration.KeyValueModified",
-    "EventTime": "2024-10-20T12:16:17+00:00",
-    "DataVersion": "2"
-}
+[
+    {
+        "id": "fdb059d0-4baf-484b-8780-d678d91f4921",
+        "topic": "/subscriptions/f2e037c1-c057-4d76-b609-66cab14a70a8/resourceGroups/poc/providers/microsoft.appconfiguration/configurationstores/pocappconfig",
+        "subject": "https://pocappconfig.azconfig.io/kv/Testing:Settings:Refresh?label=%00\u0026api-version=2023-10-01",
+        "data": {
+            "key": "Testing:Settings:Refresh",
+            "label": null,
+            "etag": "8fo_R9JgfIEs125FJR9BB7FPgqXLH3Zm-5lZO82C1-M",
+            "syncToken": "zAJw6V16=NDoxOSM3NDg0NTc5Mg==;sn=74845792"
+        },
+        "eventType": "Microsoft.AppConfiguration.KeyValueModified",
+        "eventTime": "2024-11-12T11:34:58.0000000Z",
+        "dataVersion": "2"
+    }
+]
