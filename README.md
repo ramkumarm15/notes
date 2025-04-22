@@ -1,50 +1,33 @@
-[# notes](https://learn.microsoft.com/en-us/dotnet/api/overview/azure/security.keyvault.keys-readme?view=azure-dotnet)
+#knowledgesession 
+
+Intro
+
+"Hi everyone, today I’ll be walking you through a custom NuGet package I built that centralizes how we handle application configuration and secrets. It leverages Azure App Configuration and Key Vault in .NET Core."
+
+Slide 1
+
+"Each microservice or app had its own way of managing configuration, leading to inconsistencies."
+
+"Secrets were sometimes stored in appsettings.json or passed via environment variables, which isn’t secure or scalable."
+
+"Any change in config required application restarts or redeployments."
 
 
-[Function(nameof(ConfigurationUpdateTrigger))]
-public async Task<IActionResult> RunAsync([EventGridTrigger] EventGridEvent @event)
-{
-    _logger.LogInformation("Event type: {type}, Event subject: {subject}", @event.EventType, @event.Subject);
-    _logger.LogInformation(JsonConvert.SerializeObject(@event));
-    try
-    {
-        if (@event.EventType == "Microsoft.EventGrid.SubscriptionValidationEvent")
-        {
-            return new OkObjectResult(new
-            {
-                ValidationResponse = @event.Data.ToObjectFromJson<SubscriptionValidationEventData>().ValidationCode
-            });
-        }
-        else if (@event.EventType == "Microsoft.AppConfiguration.KeyValueModified" || @event.EventType == "Microsoft.AppConfiguration.KeyValueDeleted")
-        {
-            var http = new HttpClient();
-            var apiUrl = Environment.GetEnvironmentVariable("CentralizedWrapperAPIURL");
-            _logger.LogInformation(apiUrl);
-            var response = await http.GetAsync(apiUrl);
-            _logger.LogInformation(response.StatusCode.ToString());
-        }
-    }
-    catch (Exception ex)
-    {
-        _logger.LogInformation(ex.Message.ToString());
-    }
+Slide 2
+"To address the challenges, I built a reusable NuGet package that wraps the logic for fetching configuration values from Azure App Configuration and secrets from Key Vault."
 
-    return new OkObjectResult("");
-}
+Slide 3
+"This slide shows how everything connects.
+Our application uses the NuGet package as a bridge—it abstracts away all the configuration and secret-fetching logic.
+The package connects to Azure App Configuration, which stores feature flags and app settings.
+App Config can also reference secrets from Azure Key Vault"
 
-[
-    {
-        "id": "fdb059d0-4baf-484b-8780-d678d91f4921",
-        "topic": "/subscriptions/f2e037c1-c057-4d76-b609-66cab14a70a8/resourceGroups/poc/providers/microsoft.appconfiguration/configurationstores/pocappconfig",
-        "subject": "https://pocappconfig.azconfig.io/kv/Testing:Settings:Refresh?label=%00\u0026api-version=2023-10-01",
-        "data": {
-            "key": "Testing:Settings:Refresh",
-            "label": null,
-            "etag": "8fo_R9JgfIEs125FJR9BB7FPgqXLH3Zm-5lZO82C1-M",
-            "syncToken": "zAJw6V16=NDoxOSM3NDg0NTc5Mg==;sn=74845792"
-        },
-        "eventType": "Microsoft.AppConfiguration.KeyValueModified",
-        "eventTime": "2024-11-12T11:34:58.0000000Z",
-        "dataVersion": "2"
-    }
-]
+
+Feature Management 
+
+"Feature Management is a major benefit of Azure App Configuration.
+We’ve integrated support in our package so that teams can utilize the feature.
+it allows you to turn application features on or off without deploying new code.
+So let's see what is the usage."
+Show confluence page
+
